@@ -5,11 +5,14 @@ const cardStats = document.getElementById("stats");
 const buttonSearch = document.getElementById("bt-search");
 const inputSearch = document.getElementById("input-search");
 const errorMessage = document.getElementById("errorMessage");
+const loading = document.getElementById("loading");
 
 async function fetchData(pokemonName) {
   const urlBase = "https://pokeapi.co/api/v2/pokemon/";
 
   try {
+    loading.style.display = "block";
+
     const response = await fetch(
       `${urlBase}${encodeURIComponent(pokemonName)}`,
     );
@@ -24,6 +27,8 @@ async function fetchData(pokemonName) {
   } catch (error) {
     errorMessage.innerText =
       "Pokémon não encontrado. Confira se o nome está escrito corretamente.";
+  } finally {
+    loading.style.display = "none";
   }
 }
 
