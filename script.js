@@ -6,19 +6,21 @@ const buttonSearch = document.getElementById("bt-search");
 const inputSearch = document.getElementById("input-search");
 const errorMessage = document.getElementById("errorMessage");
 const loading = document.getElementById("loading");
+const cardList = document.getElementById("cardList");
 
+const urlBase = "https://pokeapi.co/api/v2/pokemon/";
 async function fetchData(pokemonName) {
-  const urlBase = "https://pokeapi.co/api/v2/pokemon/";
-
   try {
     loading.style.display = "block";
 
     const response = await fetch(
       `${urlBase}${encodeURIComponent(pokemonName)}`,
     );
+
     if (!response.ok) {
       throw new Error("Erro ao buscar o pokemon selecionado.");
     }
+
     errorMessage.innerText = "";
 
     const resultJSON = await response.json();
@@ -49,4 +51,32 @@ buttonSearch.addEventListener("click", function () {
   fetchData(valueInput);
 });
 
-// fetchData();
+let pokemonList = [
+  "pikachu",
+  "bulbasaur",
+  "charmander",
+  "charizard",
+  "haunter",
+  "rattata",
+];
+
+pokemonList.forEach((item) => {
+  const newP = document.createElement("p");
+  newP.innerText = item;
+  cardList.appendChild(newP);
+});
+
+function cardPokemon(nome) {
+  const cardUrl = `${urlBase}${encodeURIComponent(nome)}`;
+  return cardUrl;
+}
+
+async function getPokemonPhoto(name) {
+  const result = cardPokemon(name);
+  const responseUrl = await fetch(result);
+
+  const responseJSON = await responseUrl.json();
+  console.log(responseJSON);
+}
+
+getPokemonPhoto("pikachu");
